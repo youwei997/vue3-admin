@@ -6,6 +6,7 @@ import 'element-plus/dist/index.css'
 import * as elIcons from '@element-plus/icons-vue'
 import request from './utils/request'
 import storage from './utils/storage'
+import store from './store'
 import api from './api'
 const app = createApp(App);
 //全局配置
@@ -13,4 +14,4 @@ app.config.globalProperties.$request = request;
 app.config.globalProperties.$storage = storage;
 app.config.globalProperties.$api = api;
 app.config.globalProperties.elIcons = elIcons;
-app.use(ElementPlus).use(router).mount('#app')
+app.use(ElementPlus).use(store).use(router).mount('#app')
