@@ -23,7 +23,7 @@ service.interceptors.request.use((req) => {
 service.interceptors.response.use((res) => {
     const {code, data, msg} = res.data;
     if (code === 0) {
-        return res;
+        return data;
     } else if (code === 40001) {
         ElMessage.error(TOKEN_INVALID);
         setInterval(() => {
