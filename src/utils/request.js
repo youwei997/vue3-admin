@@ -23,7 +23,7 @@ service.interceptors.request.use((req) => {
 service.interceptors.response.use((res) => {
     const {code, data, msg} = res.data;
     if (code === 0) {
-        return data;
+        return res;
     } else if (code === 40001) {
         ElMessage.error(TOKEN_INVALID);
         setInterval(() => {
@@ -41,6 +41,9 @@ function request(options) {
     options.method = options.method || "get";
     if (options.method.toLowerCase() === "get") {
         options.params = options.data;
+    }
+    if(typeof options.mock !=='undefined') {
+        config.mock = options.mock //设置局部mock
     }
     if (config.env === "prod") {
         service.defaults.baseURL = config.baseApi;
