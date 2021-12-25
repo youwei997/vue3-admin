@@ -2,7 +2,7 @@
   "name": "viteelementplus",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --host",
+    "dev": "vite --host --mode dev",
     "build": "vite build",
     "serve": "vite preview"
   },
