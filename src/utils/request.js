@@ -9,7 +9,7 @@ const NETWORK_ERROR = "网络请求异常，请稍后再试";
 
 //创建axios实例对象，添加全局配置
 const service = axios.create({
-    baseURL: config.baseURL,
+    baseURL: config.baseApi,
     timeout: 8000,
 });
 
