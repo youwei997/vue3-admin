@@ -3,11 +3,11 @@ const env = import.meta.env.MODE || 'prod'
 const EnvConfig = {
     dev:{
         baseApi:'/',
-        mockApi:'',
+        mockApi:'http://127.0.0.1:4523/mock/513888',
     },
     test: {
         baseApi: '/',
-        mockApi: '',
+        mockApi: 'http://127.0.0.1:4523/mock/513888',
     },
     prod: {
         baseApi: '/',
