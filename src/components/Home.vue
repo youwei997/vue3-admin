@@ -27,7 +27,7 @@
 						</el-icon>
 					</div>
 					<div class="bread">
-						<BreadCrumb />
+						<BreadCrumb/>
 					</div>
 				</div>
 				<div class="user-info">
@@ -41,16 +41,15 @@
 						</el-icon>
 					</el-badge>
 					<el-dropdown @command="handleLogout">
-			            <span class="user-link">
-			                 {{ userInfo.userName }}
-				            <i class="el-icon--right"></i>
-			            </span>
+            <span class="user-link">
+              {{ userInfo.userName }}
+              <i class="el-icon--right"></i>
+            </span>
 						<template #dropdown>
 							<el-dropdown-menu>
 								<el-dropdown-item command="email"
 								>邮箱：{{ userInfo.userEmail }}
-								</el-dropdown-item
-								>
+								</el-dropdown-item>
 								<el-dropdown-item command="logout">退出</el-dropdown-item>
 							</el-dropdown-menu>
 						</template>
@@ -63,119 +62,82 @@
 		</div>
 	</div>
 </template>
-<!--<script>
- import TreeMenu from "./TreeMenu.vue";
- import BreadCrumb from "./BreadCrumb.vue";
-export default {
-	name: "Home",
-	 components: { TreeMenu, BreadCrumb },
-	data() {
-		return {
-			isCollapse: false,
-			userInfo: this.$store.state.userInfo,
-			noticeCount: 0,
-			userMenu: [],
-			activeMenu: location.hash.slice(1),
-		};
-	},
-	mounted() {
-		this.getNoticeCount();
-		this.getMenuList();
-	},
-	methods: {
-		async getMenuList() {
-			try {
-				const list = await this.$api.getMenuList();
-				this.userMenu = list;
-			} catch (error) {
-				console.error(error);
-			}
-		},
-		async getNoticeCount() {
-			try {
-				const count = await this.$api.noticeCount();
-				this.noticeCount = count;
-			} catch (error) {
-				console.error(error);
-			}
-		},
-		handleLogout(key) {
-			if (key == "email") return;
-			this.$store.commit("saveUserInfo", "");
-			this.userInfo = null;
-			this.$router.push("/login");
-		},
-		toggle() {
-			this.isCollapse = !this.isCollapse;
-		},
-	},
-};
-</script>-->
 <script setup>
-import BreadCrumb from '../components/BreadCrumb.vue'
-import TreeMenu from '../components/TreeMenu.vue'
-import {Fold, Bell} from '@element-plus/icons-vue' //手动导入图标
+import BreadCrumb from "@/components/BreadCrumb.vue";
+// import TreeMenu from '../components/TreeMenu.vue'
+import TreeMenu from "@/components/TreeMenu.vue";
+import {Fold, Bell} from "@element-plus/icons-vue"; //手动导入图标
 
-import {computed, ref, getCurrentInstance, onMounted, reactive, toRefs} from 'vue'
-const {proxy} = getCurrentInstance()
+import {
+	computed,
+	ref,
+	getCurrentInstance,
+	onMounted,
+	reactive,
+	toRefs,
+} from "vue";
+
+const {proxy} = getCurrentInstance();
 
 import {useStore} from "vuex";
-const store = useStore()
+
+const store = useStore();
 
 import {useRouter} from "vue-router";
-const router = useRouter()
+
+const router = useRouter();
 
 //获取用户信息
 // const userInfo = computed(()=>store.state.userInfo)
-const userInfo = store.state.userInfo
+const userInfo = store.state.userInfo;
 
 //切换侧边菜单
-const isCollapse = ref(false)
+const isCollapse = ref(false);
 //消息推送
-const noticeCount = ref(0)
+const noticeCount = ref(0);
 //菜单列表
-const userMenu = ref([])
+const userMenu = ref([]);
 // userMenu.value = [111234, 266, 273]
 //切换侧边菜单
 const toggle = () => {
-	isCollapse.value = !isCollapse.value
-}
+	isCollapse.value = !isCollapse.value;
+};
 
 //当前选中侧边菜单
-const activeMenu = router.currentRoute.value.path
+const activeMenu = router.currentRoute.value.path;
 
 //判断如果是点击邮箱就什么都不做，如果是点击Logout，就退出
 const handleLogout = (key) => {
-	if (key === 'email') return
-	store.commit("saveUserInfo", "")
-	userInfo.value = null
-	router.push('/login')
-}
+	if (key === "email") return;
+	store.commit("saveUserInfo", "");
+	userInfo.value = null;
+	router.push("/login");
+};
 
 //获取通知数
 const getNoticeCount = async () => {
 	try {
-		const count = await proxy.$api.noticeCount()
-		noticeCount.value = count
+		const count = await proxy.$api.noticeCount();
+		noticeCount.value = count;
 	} catch (error) {
-		console.log(error)
+		console.log(error);
 	}
-}
+};
 
 //获取侧边菜单
 const getMenuList = async () => {
 	try {
-		const list = await proxy.$api.getMenuList()
-		userMenu.value = list
+		const list = await proxy.$api.getMenuList();
+		userMenu.value = list;
 	} catch (error) {
-		console.log(error)
+		console.log(error);
 	}
-}
+};
 
 onMounted(() => {
-	getNoticeCount()
-	getMenuList()
-})
+	getNoticeCount();
+	getMenuList();
+});
 </script>
 <style lang="scss">
 .basic-layout {
