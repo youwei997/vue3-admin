@@ -41,10 +41,10 @@
 						</el-icon>
 					</el-badge>
 					<el-dropdown @command="handleLogout">
-            <span class="user-link">
-              {{ userInfo.userName }}
-              <i class="el-icon--right"></i>
-            </span>
+			            <span class="user-link">
+				            {{ userInfo.userName }}
+				            <i class="el-icon--right"></i>
+			            </span>
 						<template #dropdown>
 							<el-dropdown-menu>
 								<el-dropdown-item command="email"
