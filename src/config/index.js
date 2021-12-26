@@ -16,7 +16,7 @@ const EnvConfig = {
 }
 export default{
     env:env,
-    mock:false, //全局mock
+    mock:true, //全局mock
     ...EnvConfig[env],
     namespace:'namespace'
 }
