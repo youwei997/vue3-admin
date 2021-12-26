@@ -1,11 +1,19 @@
 <template>
-	<el-breadcrumb :separator-icon="ArrowRight">
-		<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+	<el-breadcrumb :separator-icon="elIcons.ArrowRight">
+		<el-breadcrumb-item v-for="(item,index) in matched" :key="item.path">
+			<router-link to="/" v-if="index === 0">{{ item.meta.title }}</router-link>
+			<span v-else>{{ item.meta.title }}</span>
+		</el-breadcrumb-item>
 	</el-breadcrumb>
 </template>
 <script setup>
-import { ArrowRight } from '@element-plus/icons-vue'
+import {useRouter} from "vue-router";
 
+const router = useRouter()
+
+//路由跳转位置层级
+const matched = router.currentRoute.value.matched
+console.log(matched)
 </script>
 <style scoped>
 </style>

@@ -27,7 +27,7 @@
 						</el-icon>
 					</div>
 					<div class="bread">
-						<!--<BreadCrumb />-->
+						<BreadCrumb />
 					</div>
 				</div>
 				<div class="user-info">
@@ -112,15 +112,18 @@ export default {
 };
 </script>-->
 <script setup>
+import BreadCrumb from '../components/BreadCrumb.vue'
 import TreeMenu from '../components/TreeMenu.vue'
-import {computed, ref, getCurrentInstance, onMounted, reactive, toRefs} from 'vue'
-import {useStore} from "vuex";
-import {useRouter} from "vue-router";
-import {Fold,Bell} from '@element-plus/icons-vue' //手动导入图标
+import {Fold, Bell} from '@element-plus/icons-vue' //手动导入图标
 
-const store = useStore()
-const router = useRouter()
+import {computed, ref, getCurrentInstance, onMounted, reactive, toRefs} from 'vue'
 const {proxy} = getCurrentInstance()
+
+import {useStore} from "vuex";
+const store = useStore()
+
+import {useRouter} from "vue-router";
+const router = useRouter()
 
 //获取用户信息
 // const userInfo = computed(()=>store.state.userInfo)
@@ -138,7 +141,8 @@ const toggle = () => {
 	isCollapse.value = !isCollapse.value
 }
 
-const activeMenu =router.currentRoute.value.path //当前选中侧边菜单
+//当前选中侧边菜单
+const activeMenu = router.currentRoute.value.path
 
 //判断如果是点击邮箱就什么都不做，如果是点击Logout，就退出
 const handleLogout = (key) => {
@@ -148,6 +152,7 @@ const handleLogout = (key) => {
 	router.push('/login')
 }
 
+//获取通知数
 const getNoticeCount = async () => {
 	try {
 		const count = await proxy.$api.noticeCount()
@@ -157,6 +162,7 @@ const getNoticeCount = async () => {
 	}
 }
 
+//获取侧边菜单
 const getMenuList = async () => {
 	try {
 		const list = await proxy.$api.getMenuList()
@@ -166,7 +172,7 @@ const getMenuList = async () => {
 	}
 }
 
-onMounted(()=>{
+onMounted(() => {
 	getNoticeCount()
 	getMenuList()
 })
