@@ -9,7 +9,6 @@
 			:key="menu._id"
 			:index="menu.path"
 		>
-			111111111111
 			<template #title>
 				<el-icon><Menu /></el-icon>
 				<span>{{ menu.menuName }}</span>
