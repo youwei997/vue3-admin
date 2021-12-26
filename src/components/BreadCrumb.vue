@@ -13,7 +13,6 @@ const router = useRouter()
 
 //路由跳转位置层级
 const matched = router.currentRoute.value.matched
-console.log(matched)
 </script>
 <style scoped>
 </style>
