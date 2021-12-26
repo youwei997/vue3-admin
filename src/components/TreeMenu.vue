@@ -26,8 +26,9 @@
 </template>
 <script setup>
 //vue3写法
-import {Menu} from '@element-plus/icons-vue'
-import {toRefs} from "vue"; //手动导入图标
+import {Menu} from '@element-plus/icons-vue'//手动导入图标
+import {toRefs} from "vue";
+
 //defineProps不能直接解构，会失去响应式，值无法及时更新
 const props =  defineProps({
 	userMenu:{
