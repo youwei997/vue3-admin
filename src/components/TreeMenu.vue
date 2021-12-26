@@ -26,14 +26,19 @@
 </template>
 <script setup>
 //vue3写法
-import {Menu} from '@element-plus/icons-vue' //手动导入图标
-const {userMenu} =  defineProps({
+import {Menu} from '@element-plus/icons-vue'
+import {toRefs} from "vue"; //手动导入图标
+//defineProps不能直接解构，会失去响应式，值无法及时更新
+const props =  defineProps({
 	userMenu:{
 		type:Array,
-		default:[]
+		default() {
+			return [];
+		},
 	},
 })
 
+const {userMenu} = toRefs(props)
 </script>
 <!--<script>
 //vue2写法
