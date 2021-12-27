@@ -14,4 +14,6 @@ app.config.globalProperties.$request = request;
 app.config.globalProperties.$storage = storage;
 app.config.globalProperties.$api = api;
 app.config.globalProperties.elIcons = elIcons;
-app.use(ElementPlus).use(store).use(router).mount('#app')
+app.use(ElementPlus,{
+    size:'small'
+}).use(store).use(router).mount('#app')
