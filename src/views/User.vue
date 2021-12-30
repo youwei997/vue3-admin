@@ -2,13 +2,13 @@
     <div class="user-manager">
         <div class="query-form">
             <el-form ref="form" :inline="true" :model="user">
-                <el-form-item prop="userId" label="用户id">
+                <el-form-item label="用户id" prop="userId">
                     <el-input v-model="user.userId" placeholder="请输入用户id"/>
                 </el-form-item>
-                <el-form-item prop="userName" label="用户名称">
+                <el-form-item label="用户名称" prop="userName">
                     <el-input v-model="user.userName" placeholder="请输入用户名称"/>
                 </el-form-item>
-                <el-form-item prop="state" label="状态">
+                <el-form-item label="状态" prop="state">
                     <el-select v-model="user.state" placeholder="状态">
                         <el-option :value="0" label="所有"></el-option>
                         <el-option :value="1" label="在职"></el-option>
@@ -29,30 +29,31 @@
             </div>
             <el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
                 <el-table-column type="selection"/>
-                <el-table-column v-for="item in columnList" :key="item.prop" :prop="item.prop" :label="item.label"
-                                 :formatter="item.formatter"/>
+                <el-table-column v-for="item in columnList" :key="item.prop" :formatter="item.formatter"
+                                 :label="item.label"
+                                 :prop="item.prop"/>
                 <el-table-column fixed="right" label="操作">
                     <template #default="scope">
-                        <el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.row)">删除</el-button>
+                        <el-button size="small" type="text" @click="handleEdit(scope.row)">编辑</el-button>
+                        <el-button size="small" type="text" @click="handleDelete(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination class="pagination"
-                           background
-                           layout="prev, pager, next"
+            <el-pagination :page-size="pager.pageSize"
                            :total="pager.total"
-                           :page-size="pager.pageSize"
+                           background
+                           class="pagination"
+                           layout="prev, pager, next"
                            @current-change="handleCurrentChange">
             </el-pagination>
         </div>
-        <el-dialog title="新增用户" :model-value="showModel" :before-close="handleClose">
-            <el-form ref="dialogForm" :model="userForm" label-width="80px" :rules="rules">
+        <el-dialog :before-close="handleClose" :model-value="showModel" title="新增用户">
+            <el-form ref="dialogForm" :model="userForm" :rules="rules" label-width="80px">
                 <el-form-item label="用户名" prop="userName">
-                    <el-input v-model="userForm.userName" placeholder="请输入用户名称"/>
+                    <el-input v-model="userForm.userName" :disabled="action==='edit'" placeholder="请输入用户名称"/>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="userEmail">
-                    <el-input v-model="userForm.userEmail" placeholder="请输入用户邮箱">
+                    <el-input v-model="userForm.userEmail" :disabled="action==='edit'" placeholder="请输入用户邮箱">
                         <template #append>@email.com</template>
                     </el-input>
                 </el-form-item>
@@ -64,20 +65,21 @@
                 </el-form-item>
                 <el-form-item label="状态" prop="state">
                     <el-select v-model="userForm.state" placeholder="请选择状态" style="width: 100%">
-                        <el-option :value="1" label="在职"></el-option>
-                        <el-option :value="2" label="离职"></el-option>
+                        <el-option :value="1" label="离职"></el-option>
+                        <el-option :value="2" label="在职"></el-option>
                         <el-option :value="3" label="试用期"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="系统角色" prop="roleList">
-                    <el-select v-model="userForm.roleList" placeholder="请选择用户角色" multiple style="width: 100%">
+                    <el-select v-model="userForm.roleList" multiple placeholder="请选择用户角色" style="width: 100%">
                         <el-option v-for="role in roleList" :key="role._id" :label="role.roleName"
                                    :value="role._id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="部门" prop="deptId">
-                    <el-cascader :options="deptList" clearable v-model="userForm.deptId" placeholder="请选择所属部门"
-                                 :props="{checkStrictly:true,value:'_id',label:'deptName'}"
+                    <el-cascader v-model="userForm.deptId" :options="deptList"
+                                 :props="{checkStrictly:true,value:'_id',label:'deptName'}" clearable
+                                 placeholder="请选择所属部门"
                                  style="width: 100%"></el-cascader>
                 </el-form-item>
             </el-form>
@@ -221,7 +223,6 @@ const handleSearch = () => {
 
 //重置表单
 const handleReset = (form) => {
-    console.log(ctx.$refs[form])
     ctx.$refs[form].resetFields()
 }
 
@@ -290,17 +291,18 @@ const handleClose = () => {
     showModel.value = false
     handleReset('dialogForm')
 }
+
 //用户新增弹窗确认
 const handleSubmit = () => {
     ctx.$refs.dialogForm.validate(valid => {
         if (valid) {
             let params = toRaw(userForm) //toRaw 转成普通对象，防止更改响应式数据
-            params.userEmail += '@qq.com'
-            params.action = action.value
+            params.userEmail += '@qq.com' //邮箱添加后缀
+            params.action = action.value //判断是新增还是编辑
             proxy.$api.userSubmit(params).then(res => {
-                if(action.value === 'add'){
+                if (action.value === 'add') {
                     proxy.$message.success('用户创建成功')
-                }else{
+                } else {
                     proxy.$message.success('用户编辑成功')
                 }
                 handleClose('dialogForm')
@@ -309,7 +311,19 @@ const handleSubmit = () => {
         }
     })
 }
+
+//打开用户编辑弹窗
+const handleEdit = (row) => {
+    console.log(row)
+    action.value = 'edit'
+    showModel.value = true
+    ctx.$nextTick(() => {
+        //在弹窗显示完成后再赋值，弹窗的初始状态就是空，调用resetFields的方法时才能置空，
+        //否则弹窗未完成就赋值，初始值就变成row里的值，关闭编辑弹窗，新增弹窗表单值会显示编辑弹窗未清空的值
+        Object.assign(userForm, row)
+    })
+}
 </script>
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 </style>
