@@ -16,6 +16,10 @@ const service = axios.create({
 
 //请求拦截
 service.interceptors.request.use((req) => {
+    //如果是请求/users/login，就直接放行
+    if (req.url === '/users/login') {
+        return req
+    }
     const headers = req.headers;
     const {token} = storage.getItem('userInfo')
     if (!headers.Authorization) headers.Authorization = 'Bearer ' + token;
