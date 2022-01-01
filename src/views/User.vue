@@ -119,7 +119,7 @@ const rules = reactive({
       trigger: 'blur'
     },
     {
-      pattern: /1{3-9}\d{9}/,
+      pattern: /1[3-9]\d{9}/,
       message: '请输入正确的手机号',
       trigger: 'blur'
     }
@@ -217,8 +217,6 @@ const getUserList = () => {
     const {list, page} = res
     tableData.value = list
     pager.total = page.total
-  }).catch(err => {
-    console.log(err)
   })
 }
 
@@ -299,7 +297,7 @@ const handleClose = () => {
   handleReset('dialogForm')
 }
 
-//用户新增弹窗确认
+//用户新增/编辑弹窗确认
 const handleSubmit = () => {
   ctx.$refs.dialogForm.validate(valid => {
     if (valid) {
@@ -321,7 +319,6 @@ const handleSubmit = () => {
 
 //打开用户编辑弹窗
 const handleEdit = (row) => {
-  console.log(row)
   action.value = 'edit'
   showModel.value = true
   ctx.$nextTick(() => {
