@@ -54,7 +54,7 @@
         </el-form-item>
         <el-form-item label="邮箱" prop="userEmail">
           <el-input v-model="userForm.userEmail" :disabled="action==='edit'" placeholder="请输入用户邮箱">
-            <template #append>@email.com</template>
+<!--            <template #append>@email.com</template>-->
           </el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="mobile">
@@ -135,7 +135,10 @@ const rules = reactive({
 //弹窗显示对象
 const showModel = ref(false)
 //搜索表单
-const user = reactive({})
+const user = reactive({
+    //默认显示在职
+    state:1
+})
 //选中的用户列表对象
 const selectionList = ref([])
 //table列表数据
@@ -302,7 +305,7 @@ const handleSubmit = () => {
   ctx.$refs.dialogForm.validate(valid => {
     if (valid) {
       let params = toRaw(userForm) //toRaw 转成普通对象，防止更改响应式数据
-      params.userEmail += '@qq.com' //邮箱添加后缀
+      // params.userEmail += '@qq.com' //邮箱添加后缀
       params.action = action.value //判断是新增还是编辑
       proxy.$api.userSubmit(params).then(res => {
         if (action.value === 'add') {
