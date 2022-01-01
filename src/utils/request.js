@@ -48,13 +48,15 @@ function request(options) {
     if (options.method.toLowerCase() === "get") {
         options.params = options.data;
     }
+    //设置一个是否开启mock中间参数，防止局部mock变量覆盖全局mock变量，导致后续接口都变成mock接口
+    let isMock = config.mock
     if(typeof options.mock !=='undefined') {
-        config.mock = options.mock //设置局部mock
+        isMock = options.mock //设置局部mock
     }
     if (config.env === "prod") {
         service.defaults.baseURL = config.baseApi;
     } else {
-        service.defaults.baseURL = config.mock ? config.mockApi : config.baseApi;
+        service.defaults.baseURL = isMock ? config.mockApi : config.baseApi;
     }
     return service(options);
 }
