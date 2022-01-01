@@ -244,7 +244,7 @@ const handleDelete = (row) => {
   proxy.$api.userDelete({
     userIds: [row.userId]
   }).then(res => {
-    if (res.nModified > 0) {
+    if (res.modifiedCount > 0) {
       proxy.$message.success('删除成功')
       getUserList()
     } else {
@@ -266,7 +266,7 @@ const handlePatchDel = () => {
     return proxy.$message.error('请选择要删除的用户')
   }
   proxy.$api.userDelete({
-    userId: selectionList.value
+    userIds: selectionList.value
   }).then(res => {
     proxy.$message.success('删除成功')
     getUserList()
