@@ -64,9 +64,9 @@
           <el-input v-model="userForm.job" placeholder="请输入岗位"/>
         </el-form-item>
         <el-form-item label="状态" prop="state">
-          <el-select v-model="userForm.state" placeholder="请选择状态" style="width: 100%">
-            <el-option :value="1" label="离职"></el-option>
-            <el-option :value="2" label="在职"></el-option>
+          <el-select v-model.number="userForm.state" placeholder="请选择状态" style="width: 100%">
+            <el-option :value="1" label="在职"></el-option>
+            <el-option :value="2" label="离职"></el-option>
             <el-option :value="3" label="试用期"></el-option>
           </el-select>
         </el-form-item>
@@ -165,7 +165,7 @@ const columnList = ref([
     label: "用户状态",
     prop: "state",
     formatter(roe, column, value) {
-      return {1: '离职', 2: '在职', 3: '试用期'}[value]
+      return {1: '在职', 2: '离职', 3: '试用期'}[value]
     }
   },
   {
@@ -242,7 +242,7 @@ const handleCurrentChange = (current) => {
 //删除用户
 const handleDelete = (row) => {
   proxy.$api.userDelete({
-    userId: [row.userId]
+    userIds: [row.userId]
   }).then(res => {
     if (res.nModified > 0) {
       proxy.$message.success('删除成功')
