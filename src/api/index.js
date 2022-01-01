@@ -10,6 +10,7 @@ export default {
             method: 'post',
             url: '/users/login',
             data: params,
+            mock:false
         })
     },
     //获取右上角通知数
@@ -36,7 +37,7 @@ export default {
             method: 'get',
             url: '/users/list',
             data: params,
-            mock: true
+            mock: false
         })
     },
     //删除用户
