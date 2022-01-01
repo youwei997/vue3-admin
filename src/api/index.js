@@ -46,7 +46,7 @@ export default {
             method: 'post',
             url: '/users/delete',
             data: params,
-            mock: true
+            mock: false
         })
     },
     //查询角色列表
@@ -73,8 +73,7 @@ export default {
             method: 'post',
             url: '/users/operate',
             data: params,
-            mock: true
+            mock: false
         })
     },
-
 }
