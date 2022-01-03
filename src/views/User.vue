@@ -96,7 +96,7 @@
 import {getCurrentInstance, onMounted, reactive, ref, toRaw} from "vue";
 import utils from "../utils/utils";
 
-const {ctx, proxy} = getCurrentInstance()
+const {proxy} = getCurrentInstance()
 const rules = reactive({
   userName: [
     {
@@ -231,7 +231,7 @@ const handleSearch = () => {
 
 //重置表单
 const handleReset = (form) => {
-  ctx.$refs[form].resetFields()
+  proxy.$refs[form].resetFields()
 }
 
 //页码切换调用方法
@@ -302,7 +302,7 @@ const handleClose = () => {
 
 //用户新增/编辑弹窗确认
 const handleSubmit = () => {
-  ctx.$refs.dialogForm.validate(valid => {
+  proxy.$refs.dialogForm.validate(valid => {
     if (valid) {
       let params = toRaw(userForm) //toRaw 转成普通对象，防止更改响应式数据
       // params.userEmail += '@qq.com' //邮箱添加后缀
@@ -324,7 +324,7 @@ const handleSubmit = () => {
 const handleEdit = (row) => {
   action.value = 'edit'
   showModel.value = true
-  ctx.$nextTick(() => {
+  proxy.$nextTick(() => {
     //在弹窗显示完成后再赋值，弹窗的初始状态就是空，调用resetFields的方法时才能置空，
     //否则弹窗未完成就赋值，初始值就变成row里的值，关闭编辑弹窗，新增弹窗表单值会显示编辑弹窗未清空的值
     Object.assign(userForm, row)
