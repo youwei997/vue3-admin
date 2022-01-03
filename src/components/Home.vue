@@ -22,7 +22,7 @@
 				<div class="nav-left">
 					<div class="menu-fold" @click="toggle">
 						<!--<i class="el-icon-s-fold"></i>-->
-						<el-icon :size="size" :color="color">
+						<el-icon>
 							<Fold></Fold>
 						</el-icon>
 					</div>
@@ -36,7 +36,7 @@
 						class="notice"
 						type="danger"
 					>
-						<el-icon :size="size" :color="color">
+						<el-icon>
 							<Bell></Bell>
 						</el-icon>
 					</el-badge>
