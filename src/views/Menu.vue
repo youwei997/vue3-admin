@@ -1,5 +1,5 @@
 <template>
-    <div class="user-manage">
+    <div class="menu-manage">
         <div class="query-form">
             <el-form ref="form" :inline="true" :model="queryForm">
                 <el-form-item label="菜单名称" prop="menuName">
