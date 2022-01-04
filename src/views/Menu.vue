@@ -284,9 +284,11 @@ export default {
 <script setup>
 
 import utils from "../utils/utils";
-import {getCurrentInstance, onMounted, reactive, ref} from "vue";
+import {getCurrentInstance, onMounted, reactive, ref, inject} from "vue";
 
-const { proxy} = getCurrentInstance()
+const {proxy} = getCurrentInstance()
+//home页的获取侧边菜单方法，菜单页操作成功后调用
+const getMenuListHome = inject('getMenuListHome')
 
 const queryForm = reactive(
     {
@@ -410,24 +412,38 @@ const handleEdit = (row) => {
 
 //删除菜单
 const handleDel = (_id) => {
-    proxy.$api.menuSubmit({_id, action: "delete"}).then(() => {
-        proxy.$message.success("删除成功");
-        getMenuList();
-    }).catch(err => {
-        console.log(err)
-    });
+    proxy.$confirm(
+        '是否确认删除菜单',
+        '',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+        })
+        .then(() => {
+            proxy.$api.menuSubmit({_id, action: "delete"}).then(() => {
+                proxy.$message.success("删除成功");
+                getMenuList();
+                getMenuListHome()
+            }).catch(err => {
+                console.log(err)
+            });
+        })
+        .catch(() => {
+        })
 }
 // 菜单操作-提交
 const handleSubmit = async () => {
     proxy.$refs.dialogForm.validate(async (valid) => {
         if (valid) {
             // let {action, menuForm} = this;
-            let params = {action:action.value,...menuForm};
+            let params = {action: action.value, ...menuForm};
             let res = await proxy.$api.menuSubmit(params);
             showModal.value = false;
             proxy.$message.success("操作成功");
             handleReset("dialogForm");
             getMenuList();
+            getMenuListHome()
         }
     });
 }
