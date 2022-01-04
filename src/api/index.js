@@ -10,7 +10,7 @@ export default {
             method: 'post',
             url: '/users/login',
             data: params,
-            mock:false
+            mock: false
         })
     },
     //获取右上角通知数
@@ -49,11 +49,20 @@ export default {
             mock: false
         })
     },
+    //查询所有角色列表--只返回id和角色名称
+    getRoleAllList() {
+        return request({
+            method: 'get',
+            url: '/roles/allList',
+            data: {},
+            mock: true
+        })
+    },
     //查询角色列表
     getRoleList() {
         return request({
             method: 'get',
-            url: '/roles/allList',
+            url: '/roles/list',
             data: {},
             mock: true
         })
