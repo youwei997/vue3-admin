@@ -13,28 +13,27 @@
         </div>
         <div class="base-table">
             <div class="action">
-                <el-button type="primary">创建</el-button>
+                <el-button type="primary" @click="handleCreate">创建</el-button>
             </div>
             <el-table
                 :data="roleList"
                 row-key="_id"
             >
+                <!--:formatter="item.formatter"-->
                 <el-table-column
                     v-for="item in columns"
                     :key="item.prop"
                     :prop="item.prop"
                     :label="item.label"
-                    :width="item.width"
-                    :formatter="item.formatter"
                 >
                 </el-table-column>
                 <el-table-column label="操作" width="240">
                     <template #default="scope">
-                        <el-button size="mini">编辑</el-button>
+                        <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
                         <el-button size="mini">设置权限</el-button>
                         <el-button
                             type="danger"
-                            size="mini">删除
+                            size="mini" @click="handleDelete(scope.row._id)">删除
                         </el-button>
                     </template>
                 </el-table-column>
@@ -48,77 +47,27 @@
                            @current-change="handleCurrentChange">
             </el-pagination>
         </div>
-        <!--        <el-dialog title="用户新增" v-model="showModal">
-                    <el-form
-                        ref="dialogForm"
-                        :model="menuForm"
-                        label-width="100px"
-                        :rules="rules"
-                    >
-                        <el-form-item label="父级菜单" prop="parentId">
-                            <el-cascader
-                                placeholder="不选，则直接创建一级菜单"
-                                v-model="menuForm.parentId"
-                                :options="menuList"
-                                :props="{ checkStrictly: true, value: '_id', label: 'menuName' }"
-                                clearable
-                            />
-                        </el-form-item>
-                        <el-form-item label="菜单类型" prop="menuType">
-                            <el-radio-group v-model="menuForm.menuType">
-                                <el-radio :label="1">菜单</el-radio>
-                                <el-radio :label="2">按钮</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                        <el-form-item label="菜单名称" prop="menuName">
-                            <el-input v-model="menuForm.menuName" placeholder="请输入菜单名称"/>
-                        </el-form-item>
-                        <el-form-item
-                            label="菜单图标"
-                            prop="icon"
-                            v-show="menuForm.menuType == 1"
-                        >
-                            <el-input v-model="menuForm.icon" placeholder="请输入岗位"/>
-                        </el-form-item>
-                        <el-form-item
-                            label="路由地址"
-                            prop="path"
-                            v-show="menuForm.menuType == 1"
-                        >
-                            <el-input v-model="menuForm.path" placeholder="请输入路由地址"/>
-                        </el-form-item>
-                        <el-form-item
-                            label="权限标识"
-                            prop="menuCode"
-                            v-show="menuForm.menuType == 2"
-                        >
-                            <el-input v-model="menuForm.menuCode" placeholder="请输入权限标识"/>
-                        </el-form-item>
-                        <el-form-item
-                            label="组件路径"
-                            prop="component"
-                            v-show="menuForm.menuType == 1"
-                        >
-                            <el-input v-model="menuForm.component" placeholder="请输入组件路径"/>
-                        </el-form-item>
-                        <el-form-item
-                            label="菜单状态"
-                            prop="menuState"
-                            v-show="menuForm.menuType == 1"
-                        >
-                            <el-radio-group v-model="menuForm.menuState">
-                                <el-radio :label="1">正常</el-radio>
-                                <el-radio :label="2">停用</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                    </el-form>
-                    <template #footer>
+        <el-dialog title="用户新增" v-model="showModal">
+            <el-form
+                ref="dialogForm"
+                :model="roleForm"
+                label-width="100px"
+                :rules="rules"
+            >
+                <el-form-item label="角色名称" prop="roleName">
+                    <el-input v-model="roleForm.roleName" placeholder="请输入角色名称"></el-input>
+                </el-form-item>
+                <el-form-item label="备注" prop="remark">
+                    <el-input type="textarea" rows="2" v-model="roleForm.remark" placeholder="请输入备注"></el-input>
+                </el-form-item>
+            </el-form>
+            <template #footer>
                 <span class="dialog-footer">
-                  <el-button @click="handleClose">取 消</el-button>
-                  <el-button type="primary" @click="handleSubmit">确 定</el-button>
+                    <el-button @click="handleClose">取 消</el-button>
+                    <el-button type="primary" @click="handleSubmit">确 定</el-button>
                 </span>
-                    </template>
-                </el-dialog>-->
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -131,7 +80,8 @@ const {proxy} = getCurrentInstance()
 //搜索表单
 const queryForm = reactive(
     {
-        roleName: ''
+        roleName: '',
+        remark: ''
     },
 )
 //角色列表
@@ -164,9 +114,49 @@ const pager = reactive({
     pageSize: 10,
     total: 0
 })
+
+//弹窗表单
+const roleForm = reactive({
+    roleName: '', //角色名称
+    remark: '',//备注
+})
+
+//弹窗显示
+const showModal = ref(false)
+
+//表单校验
+const rules = reactive({
+    roleName: [
+        {
+            required: true,
+            message: '请输入角色名称'
+        }
+    ]
+})
+
+const action = ref('')
+
+//表单的ref
+const dialogForm = ref(null)
+
 onMounted(() => {
     getRoleList()
 })
+
+//创建表单弹窗
+const handleCreate = () => {
+    showModal.value = true
+    action.value = 'create'
+}
+
+//编辑表单弹窗
+const handleEdit = (row) => {
+    showModal.value = true
+    action.value = 'edit'
+    proxy.$nextTick(() => {
+        Object.assign(roleForm, row)
+    })
+}
 
 //获取菜单列表
 const getRoleList = async () => {
@@ -192,6 +182,38 @@ const handleCurrentChange = (current) => {
 const handleClose = () => {
     showModal.value = false;
     handleReset("dialogForm");
+}
+
+const handleDelete = (id) => {
+    const params = {
+        id,
+        action: 'delete'
+    }
+    proxy.$api.roelOperate(params).then(res => {
+        proxy.$message.success('删除成功')
+        getRoleList()
+    });
+}
+
+//表单确认提交
+const handleSubmit = () => {
+    dialogForm.value.validate((valid) => {
+        if (valid) {
+            const params = {
+                action: action.value,
+                ...roleForm
+            }
+            proxy.$api.roelOperate(params).then(res => {
+                if (action.value === 'create') {
+                    proxy.$message.success('创建成功')
+                } else {
+                    proxy.$message.success('编辑成功')
+                }
+                handleClose()
+                getRoleList()
+            });
+        }
+    })
 }
 
 </script>

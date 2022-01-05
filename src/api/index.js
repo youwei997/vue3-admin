@@ -76,7 +76,7 @@ export default {
             mock: true
         })
     },
-    //新增用户
+    //用户新增/创建
     userSubmit(params) {
         return request({
             method: 'post',
@@ -92,6 +92,15 @@ export default {
             url: '/menu/operate',
             data: params,
             mock: false
+        })
+    },
+    //角色新增/创建
+    roelOperate(params) {
+        return request({
+            method: 'post',
+            url: '/roles/operate',
+            data: params,
+            mock: true
         })
     },
 }
