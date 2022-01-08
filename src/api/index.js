@@ -94,8 +94,8 @@ export default {
             mock: false
         })
     },
-    //角色新增/创建
-    roelOperate(params) {
+    //角色新增/创建/删除
+    roleOperate(params) {
         return request({
             method: 'post',
             url: '/roles/operate',
