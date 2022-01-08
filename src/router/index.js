@@ -1,8 +1,11 @@
-import {createRouter, createWebHashHistory, createWebHistory} from "vue-router";
+import {
+    createRouter,
+    createWebHashHistory,
+    createWebHistory
+} from "vue-router";
 import Home from '../components/Home.vue'
 
-const routes = [
-    {
+const routes = [{
         name: 'home',
         path: '/welcome',
         meta: {
@@ -10,8 +13,7 @@ const routes = [
         },
         component: Home,
         // redirect: '/welcome',
-        children: [
-            {
+        children: [{
                 name: 'welcome',
                 path: '/welcome',
                 meta: {
@@ -45,10 +47,14 @@ const routes = [
             },
         ]
     },
-
+    {
+        name: 'default',
+        path: '/',
+        redirect: '/login',
+    },
     {
         name: 'login',
-        path: '/',
+        path: '/login',
         meta: {
             title: '登录页'
         },

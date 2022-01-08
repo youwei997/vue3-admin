@@ -4,10 +4,10 @@
 			<el-form :model="user" status-icon :rules="rules" ref="loginFormRef">
 				<div class="title">火星</div>
 				<el-form-item prop="userName">
-					<el-input type="text" :prefix-icon="elIcons.User" v-model="user.userName"/>
+					<el-input type="text" :prefix-icon="elIcons.User" v-model="user.userName" placeholder="请输入用户名"/>
 				</el-form-item>
 				<el-form-item prop="userPwd">
-					<el-input type="password" :prefix-icon="elIcons.Lock" v-model="user.userPwd"/>
+					<el-input type="password" :prefix-icon="elIcons.Lock" v-model="user.userPwd" placeholder="请输入密码"/>
 				</el-form-item>
 				<el-form-item>
 					<el-button class="btn-login" type="primary" @click="login">登录</el-button>
@@ -61,7 +61,7 @@ const rules = reactive({
 })
 
 //获取表单的ref
-const loginFormRef = ref()
+const loginFormRef = ref(null)
 
 //登录方法
 const login = () => {
