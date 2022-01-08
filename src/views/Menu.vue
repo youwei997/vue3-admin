@@ -59,7 +59,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <el-dialog title="用户新增" v-model="showModal">
+        <el-dialog title="菜单操作" v-model="showModal">
             <el-form
                 ref="dialogForm"
                 :model="menuForm"
