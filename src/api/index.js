@@ -55,16 +55,16 @@ export default {
             method: 'get',
             url: '/roles/allList',
             data: {},
-            mock: true
+            mock: false
         })
     },
     //查询角色列表
-    getRoleList() {
+    getRoleList(params) {
         return request({
             method: 'get',
             url: '/roles/list',
-            data: {},
-            mock: true
+            data: params,
+            mock: false
         })
     },
     //查询部门列表
@@ -100,7 +100,7 @@ export default {
             method: 'post',
             url: '/roles/operate',
             data: params,
-            mock: true
+            mock: false
         })
     },
     updatePermission(params){
@@ -108,7 +108,7 @@ export default {
             method: 'post',
             url: '/roles/update/permission',
             data: params,
-            mock: true
+            mock: false
         })
     }
 }

@@ -135,16 +135,26 @@ const columns = ref([
   {
     label: "权限列表",
     prop: "permissionList",
-    formatter(row,column,value){
-        let names = []
-        let list = value.halfCheckedKeys || []
-        list.map(key=>{
-            if(key){
-                names.push(actionMap[key])
-            }
-            return names.join(',')
-        })
-    }
+    formatter(row, column, value) {
+      console.log(actionMap);
+      let names = [];
+      let list = value.halfCheckedKeys || [];
+      console.log(value.halfCheckedKeys);
+      list.map((key) => {
+        let name = actionMap[key]
+        if (key && name) {
+          names.push(actionMap[key]);
+        }
+      });
+      return names.join(",");
+    },
+  },
+  {
+    label: "更新时间",
+    prop: "updateTime",
+    formatter(row, column, value) {
+      return utils.formatDate(new Date(value));
+    },
   },
   {
     label: "创建时间",
@@ -196,7 +206,7 @@ const dialogForm = ref(null);
 // 权限树的ref
 const permissionTree = ref(null);
 
-const actionMap = reactive({})
+const actionMap = reactive({});
 
 onMounted(() => {
   getRoleList();
@@ -224,16 +234,25 @@ const handleCreate = () => {
 const handleEdit = (row) => {
   showModal.value = true;
   action.value = "edit";
+  let params = {
+    _id: row._id,
+    roleName: row.roleName,
+    remark: row.remark,
+  };
   proxy.$nextTick(() => {
-    Object.assign(roleForm, row);
+    Object.assign(roleForm, params);
   });
 };
 
 //获取角色列表
 const getRoleList = async () => {
   try {
-    let { list } = await proxy.$api.getRoleList(queryForm);
+    let { list, page } = await proxy.$api.getRoleList({
+      ...queryForm,
+      ...pager,
+    });
     roleList.value = list;
+    pager.total = page.total;
   } catch (e) {
     throw new Error(e);
   }
@@ -256,15 +275,26 @@ const handleClose = () => {
 };
 
 //删除角色
-const handleDelete = (id) => {
-  const params = {
-    id,
-    action: "delete",
-  };
-  proxy.$api.roleOperate(params).then((res) => {
-    proxy.$message.success("删除成功");
-    getRoleList();
-  });
+const handleDelete = (_id) => {
+  proxy
+    .$confirm("是否确认删除角色", "", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    })
+    .then(() => {
+      const params = {
+        _id,
+        action: "delete",
+      };
+      proxy.$api.roleOperate(params).then((res) => {
+        proxy.$message.success("删除成功");
+        getRoleList();
+      });
+    })
+    .catch(() => {
+      console.log("取消");
+    });
 };
 
 //表单确认提交
@@ -334,20 +364,20 @@ const handlePermissionSubmit = async () => {
 };
 
 const getActionMap = (list) => {
-  let actionMap = {};
+  let actionArr = {};
   const deep = (arr) => {
     while (arr.length) {
-        let item = arr.pop()
-        if(item.children && item.action){
-            actionMap[item._id] = item.menuName
-        }
-        if(item.children && !item.action){
-            deep(item.children)
-        }
+      let item = arr.pop();
+      if (item.children && item.action) {
+        actionArr[item._id] = item.menuName;
+      }
+      if (item.children && !item.action) {
+        deep(item.children);
+      }
     }
   };
   deep(JSON.parse(JSON.stringify(list)));
-  actionMap = actionMap
+  Object.assign(actionMap, actionArr);
 };
 </script>
 
