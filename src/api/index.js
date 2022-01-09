@@ -40,6 +40,15 @@ export default {
             mock: false
         })
     },
+    //获取用户列表(所有，不需要参数,不分页)
+    getUserAllList() {
+        return request({
+            method: 'get',
+            url: '/users/all/list',
+            data: {},
+            mock: false
+        })
+    },
     //删除用户
     userDelete(params) {
         return request({
@@ -68,12 +77,12 @@ export default {
         })
     },
     //查询部门列表
-    getDeptList() {
+    getDeptList(params) {
         return request({
             method: 'get',
             url: '/dept/list',
-            data: {},
-            mock: true
+            data: params,
+            mock: false
         })
     },
     //用户新增/创建
@@ -103,12 +112,22 @@ export default {
             mock: false
         })
     },
-    updatePermission(params){
+    //角色更新权限
+    updatePermission(params) {
         return request({
             method: 'post',
             url: '/roles/update/permission',
             data: params,
             mock: false
         })
-    }
+    },
+    //部门操作：新增，编辑，删除
+    deptOperate(params) {
+        return request({
+            method: 'post',
+            url: '/dept/operate',
+            data: params,
+            mock: false
+        })
+    },
 }
